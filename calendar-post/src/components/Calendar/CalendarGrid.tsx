@@ -1,12 +1,17 @@
 import CalendarDayCell from "./CalendarDayCell";
 import { WEEKDAYS } from "../../utils/dateUtils";
 
+interface DayItem {
+  day: number;
+  type: "prev" | "current" | "next";
+}
+
 interface Props {
-  days: (number | null)[];
+  days: DayItem[];
   selectedDay: number | null;
   onSelectDay: (day: number) => void;
   postCounts: Record<number, number>;
-  postsByDay?: Record<number, import("../../data/calendarPosts").Post[]>;
+  postsByDay?: Record<number, any[]>;
 }
 
 export default function CalendarGrid({
@@ -18,17 +23,9 @@ export default function CalendarGrid({
 }: Props) {
   return (
     <div className="relative mt-4">
-      {/* Top gradient border */}
-      <div
-        className="absolute top-0 left-0 w-full h-px
-                 bg-gradient-to-r
-                 from-transparent
-                 via-gray-700
-                 to-transparent"
-      />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
 
       <div className="pt-4">
-        {/* Weekdays */}
         <div className="grid grid-cols-7 text-xs text-gray-400 px-4 py-3">
           {WEEKDAYS.map((d) => (
             <div key={d} className="text-center">
@@ -37,16 +34,18 @@ export default function CalendarGrid({
           ))}
         </div>
 
-        {/* Calendar grid */}
         <div className="grid grid-cols-7 auto-rows-[14rem]">
-          {days.map((day, i) => (
+          {days.map(({ day, type }, i) => (
             <div key={i} className="border border-gray-800">
               <CalendarDayCell
-                day={day ?? undefined}
-                count={day ? postCounts[day] ?? undefined : undefined}
-                posts={day ? postsByDay?.[day] : undefined}
-                isSelected={day === selectedDay}
-                onClick={() => day && onSelectDay(day)}
+                day={day}
+                type={type}
+                count={type === "current" ? postCounts[day] : undefined}
+                posts={type === "current" ? postsByDay?.[day] : undefined}
+                isSelected={type === "current" && day === selectedDay}
+                onClick={
+                  type === "current" ? () => onSelectDay(day) : undefined
+                }
               />
             </div>
           ))}
@@ -54,6 +53,4 @@ export default function CalendarGrid({
       </div>
     </div>
   );
-
-
 }
