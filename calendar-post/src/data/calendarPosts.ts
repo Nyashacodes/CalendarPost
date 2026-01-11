@@ -18,7 +18,7 @@ export const calendarPosts: Record<string, Post[]> = {
     campaign_id: "cmp-900",
     post_id: "post-900",
     scheduled_date: "2025-12-02T10:00:00Z",
-    caption: "December campaign kickoff ❄️",
+    caption: "December campaign kickoff ❄️ test more text to exceed limit and see ellipsis in action",
     image_url: "https://picsum.photos/300/200?900",
     status: "scheduled",
     platform: "linkedin"

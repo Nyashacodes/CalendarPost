@@ -51,7 +51,15 @@ export default function CalendarDayCell({
       {firstPost ? (
         <div className="mt-6 bg-gray-900 rounded overflow-hidden text-gray-300 text-sm h-auto flex flex-col">
           <div className="p-3">
-            <div className="h-10 overflow-hidden text-xs text-gray-300">{firstPost.caption}</div>
+            <div className="text-xs text-gray-300 line-clamp-2">
+  {firstPost.caption}
+</div>
+
+{/* Fake "more" indicator */}
+{firstPost.caption.length > 60 && (
+  <span className="text-xs text-[#3b82f6] mt-1 block">more</span>
+)}
+
           </div>
 
           <div className="px-3 pb-3">
