@@ -17,9 +17,20 @@ export default function CalendarGrid({
   postsByDay,
 }: Props) {
   return (
-    <div>
-      <div className="mt-4 border border-gray-800 rounded-lg overflow-hidden">
-        <div className="w-full grid grid-cols-7 text-xs text-gray-400 bg-transparent px-4 py-3 border-b border-gray-800">
+    <div className="relative mt-4">
+      {/* Top gradient border */}
+      <div
+        className="absolute top-0 left-0 w-full h-px
+                 bg-gradient-to-r
+                 from-transparent
+                 via-gray-700
+                 to-transparent"
+      />
+
+      {/* Calendar container */}
+      <div className="rounded-lg overflow-hidden pt-4">
+        {/* Weekdays header */}
+        <div className="w-full grid grid-cols-7 text-xs text-gray-400 bg-transparent px-4 py-3">
           {WEEKDAYS.map((d) => (
             <div key={d} className="text-center">
               {d}
@@ -27,7 +38,8 @@ export default function CalendarGrid({
           ))}
         </div>
 
-        <div className="w-full grid grid-cols-7 divide-x divide-y divide-gray-800 auto-rows-[14rem] border-b border-gray-800">
+        {/* Calendar grid */}
+        <div className="w-full grid grid-cols-7 divide-x divide-y divide-gray-800 auto-rows-[14rem]">
           {days.map((day, i) => (
             <CalendarDayCell
               key={i}
@@ -42,4 +54,5 @@ export default function CalendarGrid({
       </div>
     </div>
   );
+
 }
