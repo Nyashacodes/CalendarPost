@@ -104,7 +104,7 @@ export default function Calendar() {
 
 
   return (
-    <div className="bg-gray-950 rounded-xl w-full max-w-full mx-auto p-6 border border-gray-800">
+    <div className="bg-gray-950 rounded-xl w-full max-w-full mx-auto p-6 ">
       <CalendarTopBar
         activePlatforms={activePlatforms}
         onTogglePlatform={togglePlatform}
