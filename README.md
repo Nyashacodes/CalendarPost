@@ -10,6 +10,16 @@ CalendarPost is a modern social media content calendar dashboard built with Reac
 - **Simulated Backend**: Includes a simulated data fetching mechanism to demonstrate loading states and asynchronous data handling.
 - **Responsive Design**: Fully responsive interface that works on different screen sizes.
 
+## ✅ Assessment Coverage
+
+This implementation satisfies the assessment requirements:
+
+- Month navigation with year rollover
+- Accurate calendar date rendering (including leap years)
+- Platform-based filtering with loading simulation
+- Mock server data scoped by month and filters
+- Interactive UI states (hover, selected date)
+
 ## 🛠️ Technology Stack
 
 - **[React 19](https://react.dev/)**: The library for web and native user interfaces.
@@ -17,6 +27,11 @@ CalendarPost is a modern social media content calendar dashboard built with Reac
 - **[Vite](https://vitejs.dev/)**: Next Generation Frontend Tooling for fast development and building.
 - **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
 - **[Lucide React](https://lucide.dev/)**: Beautiful & consistent icons.
+
+## 🎨 Design Reference
+
+UI and interactions are implemented based on the provided Figma design:  
+[Front-End Assessment Figma Link](https://www.figma.com/design/3Xr9VCtO0zvrEOtSPJ5qGX/Front-End-Assessment)
 
 ## 🚀 Getting Started
 
@@ -28,12 +43,12 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 ### Installation
 
-1.  Clone the repository (or download the source code).
-2.  Navigate to the project directory:
+1. Clone the repository (or download the source code).
+2. Navigate to the project directory:
     ```bash
     cd calendar-post
     ```
-3.  Install dependencies:
+3. Install dependencies:
     ```bash
     npm install
     ```
@@ -44,27 +59,3 @@ Start the development server:
 
 ```bash
 npm run dev
-```
-
-Open your browser and visit `http://localhost:5173` (or the URL shown in the terminal) to view the app.
-
-## 📂 Project Structure
-
-- **`src/components`**: Reusable UI components.
-    - **`Calendar`**: Contains the main calendar logic and sub-components (`CalendarGrid`, `CalendarHeader`, etc.).
-    - **`UI`**: Generic UI elements like `Loader`.
-- **`src/data`**: detailed mock data for calendar posts.
-- **`src/utils`**: Utility functions, including date helper functions.
-
-## 📜 Scripts
-
-- **`npm run dev`**: Starts the development server.
-- **`npm run build`**: Compiles TypeScript and builds the app for production.
-- **`npm run lint`**: Runs ESLint to check for code quality issues.
-- **`npm run preview`**: Preview the production build locally.
-
----
-
-### 📝 Notes
-
-This project uses a mock data source (`src/data/calendarPosts.ts`) to simulate a backend response. Real-world implementation would replace this with actual API calls.
