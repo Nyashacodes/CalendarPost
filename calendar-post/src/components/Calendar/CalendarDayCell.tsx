@@ -15,8 +15,11 @@ export default function CalendarDayCell({
   isSelected,
   onClick,
 }: Props) {
-  if (!day) return <div className="w-full h-full p-2" />;
-
+if (!day) {
+  return (
+    <div className="w-full h-full p-3 bg-gray-900/40 border border-dashed border-gray-800 select-none" />
+  );
+}
   const firstPost = posts && posts.length > 0 ? posts[0] : undefined;
   const extraCount = posts ? Math.max(0, posts.length - 1) : typeof count === "number" && count > 0 ? count : 0;
 
