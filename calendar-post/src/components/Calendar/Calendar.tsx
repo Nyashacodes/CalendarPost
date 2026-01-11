@@ -7,6 +7,7 @@ import {
   getStartDayOfMonth,
   formatDateKey,
 } from "../../utils/dateUtils";
+import type { Platform } from "../../data/calendarPosts";
 import { calendarPosts } from "../../data/calendarPosts";
 
 export default function Calendar() {
@@ -16,6 +17,13 @@ const [month, setMonth] = useState(11); // December (0-based)
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [postCounts, setPostCounts] = useState<Record<number, number>>({});
+
+  const [activePlatforms, setActivePlatforms] = useState<Platform[]>([
+  "instagram",
+  "linkedin",
+  "facebook",
+]);
+
 
   const totalDays = getDaysInMonth(year, month);
   const startDay = getStartDayOfMonth(year, month);
@@ -37,23 +45,31 @@ const [month, setMonth] = useState(11); // December (0-based)
 }, [month, year]);
 
 
-  useEffect(() => {
-    setLoading(true);
+useEffect(() => {
+  setLoading(true);
 
-    const timer = setTimeout(() => {
-      const counts: Record<number, number> = {};
+  const timer = setTimeout(() => {
+    const counts: Record<number, number> = {};
 
-      for (let d = 1; d <= totalDays; d++) {
-        const key = formatDateKey(year, month, d);
-        counts[d] = calendarPosts[key]?.length ?? 0;
-      }
+    for (let d = 1; d <= totalDays; d++) {
+      const key = formatDateKey(year, month, d);
 
-      setPostCounts(counts);
-      setLoading(false);
-    }, 800);
+      const postsForDay = calendarPosts[key] ?? [];
 
-    return () => clearTimeout(timer);
-  }, [year, month, totalDays]);
+      const filteredPosts = postsForDay.filter((post) =>
+        activePlatforms.includes(post.platform)
+      );
+
+      counts[d] = filteredPosts.length;
+    }
+
+    setPostCounts(counts);
+    setLoading(false);
+  }, 800);
+
+  return () => clearTimeout(timer);
+}, [year, month, totalDays, activePlatforms]);
+
 
   const goToPrevMonth = () => {
     if (month === 0) {
@@ -73,6 +89,15 @@ const [month, setMonth] = useState(11); // December (0-based)
     }
   };
 
+  const togglePlatform = (platform: Platform) => {
+  setActivePlatforms((prev) =>
+    prev.includes(platform)
+      ? prev.filter((p) => p !== platform)
+      : [...prev, platform]
+  );
+};
+
+
   return (
     <div className="bg-gray-950 rounded-xl p-6 max-w-5xl mx-auto">
       <CalendarHeader
@@ -81,7 +106,11 @@ const [month, setMonth] = useState(11); // December (0-based)
         onNext={goToNextMonth}
       />
 
-      <PlatformFilters />
+      <PlatformFilters
+  activePlatforms={activePlatforms}
+  onToggle={togglePlatform}
+/>
+
 
       {loading ? (
         <div className="h-64 flex items-center justify-center text-gray-400">
