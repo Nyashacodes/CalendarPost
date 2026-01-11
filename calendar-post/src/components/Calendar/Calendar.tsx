@@ -1,13 +1,100 @@
+import { useEffect, useState } from "react";
 import CalendarHeader from "./CalendarHeader";
 import PlatformFilters from "./PlatformFilters";
 import CalendarGrid from "./CalendarGrid";
+import {
+  getDaysInMonth,
+  getStartDayOfMonth,
+  formatDateKey,
+} from "../../utils/dateUtils";
+import { calendarPosts } from "../../data/calendarPosts";
 
 export default function Calendar() {
+const [year, setYear] = useState(2025);
+const [month, setMonth] = useState(11); // December (0-based)
+
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [postCounts, setPostCounts] = useState<Record<number, number>>({});
+
+  const totalDays = getDaysInMonth(year, month);
+  const startDay = getStartDayOfMonth(year, month);
+
+  
+
+  const days: (number | null)[] = [
+    ...Array(startDay).fill(null),
+    ...Array.from({ length: totalDays }, (_, i) => i + 1),
+  ];
+
+  const monthLabel = new Date(year, month).toLocaleString("default", {
+    month: "long",
+    year: "numeric",
+  });
+
+  useEffect(() => {
+  setSelectedDay(null);
+}, [month, year]);
+
+
+  useEffect(() => {
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      const counts: Record<number, number> = {};
+
+      for (let d = 1; d <= totalDays; d++) {
+        const key = formatDateKey(year, month, d);
+        counts[d] = calendarPosts[key]?.length ?? 0;
+      }
+
+      setPostCounts(counts);
+      setLoading(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [year, month, totalDays]);
+
+  const goToPrevMonth = () => {
+    if (month === 0) {
+      setMonth(11);
+      setYear((y) => y - 1);
+    } else {
+      setMonth((m) => m - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (month === 11) {
+      setMonth(0);
+      setYear((y) => y + 1);
+    } else {
+      setMonth((m) => m + 1);
+    }
+  };
+
   return (
     <div className="bg-gray-950 rounded-xl p-6 max-w-5xl mx-auto">
-      <CalendarHeader />
+      <CalendarHeader
+        monthLabel={monthLabel}
+        onPrev={goToPrevMonth}
+        onNext={goToNextMonth}
+      />
+
       <PlatformFilters />
-      <CalendarGrid />
+
+      {loading ? (
+        <div className="h-64 flex items-center justify-center text-gray-400">
+          Loading calendar data…
+        </div>
+      ) : (
+        <CalendarGrid
+          days={days}
+          selectedDay={selectedDay}
+          onSelectDay={setSelectedDay}
+          postCounts={postCounts}
+        />
+      )}
     </div>
   );
 }
