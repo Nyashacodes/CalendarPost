@@ -1,13 +1,12 @@
-export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-// Convert JS Sunday(0) → Monday(0)
+// JS getDay() already returns Sunday(0) → Saturday(6)
 export function getStartDayOfMonth(year: number, month: number) {
-  const day = new Date(year, month, 1).getDay();
-  return day === 0 ? 6 : day - 1;
+  return new Date(year, month, 1).getDay();
 }
 
 export function formatDateKey(

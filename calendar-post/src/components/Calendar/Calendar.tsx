@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import CalendarHeader from "./CalendarHeader";
-import PlatformFilters from "./PlatformFilters";
+// import PlatformFilters from "./PlatformFilters";
 import CalendarGrid from "./CalendarGrid";
+import CalendarTopBar from "./CalendarTopBar";
 import {
   getDaysInMonth,
   getStartDayOfMonth,
@@ -17,6 +18,7 @@ const [month, setMonth] = useState(11); // December (0-based)
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [postCounts, setPostCounts] = useState<Record<number, number>>({});
+  const [postsByDay, setPostsByDay] = useState<Record<number, import("../../data/calendarPosts").Post[]>>({});
 
   const [activePlatforms, setActivePlatforms] = useState<Platform[]>([
   "instagram",
@@ -50,6 +52,7 @@ useEffect(() => {
 
   const timer = setTimeout(() => {
     const counts: Record<number, number> = {};
+    const postsMap: Record<number, import("../../data/calendarPosts").Post[]> = {};
 
     for (let d = 1; d <= totalDays; d++) {
       const key = formatDateKey(year, month, d);
@@ -61,15 +64,16 @@ useEffect(() => {
       );
 
       counts[d] = filteredPosts.length;
+      postsMap[d] = filteredPosts;
     }
 
     setPostCounts(counts);
+    setPostsByDay(postsMap);
     setLoading(false);
   }, 800);
 
   return () => clearTimeout(timer);
 }, [year, month, totalDays, activePlatforms]);
-
 
   const goToPrevMonth = () => {
     if (month === 0) {
@@ -99,17 +103,22 @@ useEffect(() => {
 
 
   return (
-    <div className="bg-gray-950 rounded-xl p-6 max-w-5xl mx-auto">
-      <CalendarHeader
-        monthLabel={monthLabel}
-        onPrev={goToPrevMonth}
-        onNext={goToNextMonth}
-      />
+    <div className="bg-gray-950 rounded-xl w-full max-w-full mx-auto p-6 border border-gray-800">
+      <CalendarTopBar
+  activePlatforms={activePlatforms}
+  onTogglePlatform={togglePlatform}
+/>
 
-      <PlatformFilters
+<CalendarHeader
+  monthLabel={monthLabel}
+  onPrev={goToPrevMonth}
+  onNext={goToNextMonth}
+/>
+
+      {/* <PlatformFilters
   activePlatforms={activePlatforms}
   onToggle={togglePlatform}
-/>
+/> */}
 
 
       {loading ? (
@@ -122,6 +131,7 @@ useEffect(() => {
           selectedDay={selectedDay}
           onSelectDay={setSelectedDay}
           postCounts={postCounts}
+          postsByDay={postsByDay}
         />
       )}
     </div>
